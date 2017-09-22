@@ -1,17 +1,14 @@
-<%-- 
-    Document   : index
-    Created on : Sep 19, 2017, 4:00:27 PM
-    Author     : Carson
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <jsp:include page="resources/partialPages/javascript.jsp"></jsp:include>
+        <jsp:include page="resources/partialPages/stylesheets.jsp"></jsp:include>
+
+        <title>Home</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <jsp:include page="resources/partialPages/navbar.jsp"></jsp:include>
     </body>
 </html>

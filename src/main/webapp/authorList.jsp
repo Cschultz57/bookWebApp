@@ -5,30 +5,47 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
-        <jsp:include page="resources/partialPages/javascript.jsp"></jsp:include>
-        <jsp:include page="resources/partialPages/stylesheets.jsp"></jsp:include>
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Author List</title>
     </head>
-    <body>
-        <jsp:include page="resources/partialPages/navbar.jsp"></jsp:include>
-        <div style="margin-top: 15%" class="container-fluid wrapper">
-            <div class="row">
-                <div class="col-xs-6 col-xs-offset-3">
-                    <table class="table-striped">
-                        <c:forEach var="author" items="${authors}">
-                            <tr>
-                                <td>${author.authorId}</td>
-                                <td>${author.authorName}</td>
-                                <td><fmt:formatDate pattern= "yyyy-MM-dd" value="${author.dateAdded}"/></td>
-                            </tr>
-                        </c:forEach>    
-                    </table>    
-                </div>
-            </div>
-
-        </div>
-
-    </body>
+    <h1>Author List</h1>
+    <form id="authorAddEditForm" name="authorAddEditForm" method="POST" action="ac?rType=addEditAuthor">
+        <input type="submit" value="Add/Edit">
+    </form>
+    <form id="authorDeleteForm" name="authorDeleteForm" method="POST" action="ac?rType=deleteAuthor">
+        <input type="submit" value="Delete">
+        <table>
+            
+            
+                <th></th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date Added</th>
+               
+            <c:forEach var="a" items="${authors}" varStatus="varStatus">                
+                <c:choose>
+                    <c:when test="${varStatus.count%2 == 0}">
+                        <tr style="background-color: #F0F8FF;">                              
+                        </c:when>
+                        <c:otherwise>
+                        <tr>
+                        </c:otherwise>     
+                    </c:choose>
+                            
+                    <td>
+                        <input type="checkbox" name="authorId" value="${a.authorId}">
+                    </td>
+                    <td>${a.authorId}</td>
+                    <td>${a.authorName}</td>
+                    <td>
+                        <fmt:formatDate pattern="M/d/yyyy" value="${a.dateAdded}"/>                                 
+                    </td>
+                </tr>  
+            </c:forEach>  
+           </table>                
+    </form>     
+    <br>
+    <br>
+    <a href="AuthorService?rType=home">Go to Home Page</a>
+</body>
 </html>

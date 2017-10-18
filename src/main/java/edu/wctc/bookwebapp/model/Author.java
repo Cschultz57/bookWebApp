@@ -12,39 +12,76 @@ public class Author {
     private String authorName;
     private Date dateAdded;
 
+    /**
+     *
+     */
     public Author() {
     }
 
+    /**
+     *
+     * @param authorId
+     */
     public Author(Integer authorId) {
         this.authorId = authorId;
     }
 
+    /**
+     *
+     * @param authorId
+     * @param authorName
+     * @param dateAdded
+     */
     public Author(Integer authorId, String authorName, Date dateAdded) {
         this.authorId = authorId;
         this.authorName = authorName;
         this.dateAdded = dateAdded;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getAuthorId() {
         return authorId;
     }
 
+    /**
+     *
+     * @param authorId
+     */
     public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getAuthorName() {
         return authorName;
     }
 
+    /**
+     *
+     * @param authorName
+     */
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getDateAdded() {
         return dateAdded;
     }
 
+    /**
+     *
+     * @param dateAdded
+     */
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }

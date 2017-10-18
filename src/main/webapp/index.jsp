@@ -10,7 +10,7 @@
 
             <ul>
                 <li>
-                    <a href="AuthorService?rType=authorList">Go to Author List</a>
+                    <a href="AuthorController?action=authorList">Go to Author List</a>
                 </li>
             </ul>
         </body>

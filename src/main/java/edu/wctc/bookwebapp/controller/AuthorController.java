@@ -42,16 +42,16 @@ public class AuthorController extends HttpServlet {
     private final String AUTHOR_NAME = "author_name";
     private final String AUTHOR_DATE = "author_date";
     private final String AUTHOR_ID_COL = "author_id";
-    
+
     private int MAX_RECORDS = 50;
-    
+
     private DataAccess db;
     private AuthorService as;
 
-    private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/bookWebApp";
-    private String userName = "root";
-    private String password = "admin";
+    private String driverClass;
+    private String url;
+    private String userName;
+    private String password;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -65,8 +65,8 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        db = new MySqlDataAccess(driver, url, userName, password);
-        IAuthorDao dao = new AuthorDao(driver, url, userName, password, db);
+        db = new MySqlDataAccess(driverClass, url, userName, password);
+        IAuthorDao dao = new AuthorDao(driverClass, url, userName, password, db);
         as = new AuthorService(dao);
 
         try {
@@ -129,7 +129,7 @@ public class AuthorController extends HttpServlet {
 
     private void GetAuthorListPage(HttpServletRequest request, HttpServletResponse response) {
         try {
-           
+            //fix me
             request.setAttribute("authors", as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS));
 
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class AuthorController extends HttpServlet {
     private void EditAuthor(HttpServletRequest request, HttpServletResponse response) {
         try {
             String authorId = (request.getParameter("authorId"));
-            Author authorToEdit = as.retrieveAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId );
+            Author authorToEdit = as.retrieveAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId);
             authorToEdit.setAuthorName(request.getParameter("authorName" + authorId));
             DateFormat format = new SimpleDateFormat("MM-dd-yy");
             Date dateAdded = format.parse(request.getParameter("addedDate" + authorId));
@@ -160,7 +160,7 @@ public class AuthorController extends HttpServlet {
 
     private void DeleteAuthorById(HttpServletRequest request, HttpServletResponse response) {
         try {
-             String authorId = (request.getParameter("authorId"));
+            String authorId = (request.getParameter("authorId"));
             as.deleteAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId);
             request.setAttribute("authors", RefreshAuthorList());
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class AuthorController extends HttpServlet {
             DateFormat format = new SimpleDateFormat("MM-dd-YYYY");
             Date dateAdded = format.parse(request.getParameter("addAuthorDate"));
             newAuthor.setDateAdded(dateAdded);
-            
+
             as.addNewAuthor(newAuthor);
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
@@ -185,6 +185,14 @@ public class AuthorController extends HttpServlet {
 
     private List<Author> RefreshAuthorList() throws SQLException, ClassNotFoundException {
         return as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS);
+    }
+
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter("db.driver.class");
+        url = getServletContext().getInitParameter("db.url");
+        userName = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");
     }
 
 }

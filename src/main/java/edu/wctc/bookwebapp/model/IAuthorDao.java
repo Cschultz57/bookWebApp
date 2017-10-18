@@ -4,10 +4,6 @@ package edu.wctc.bookwebapp.model;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- *
- * @author Carson
- */
 public interface IAuthorDao {
 
     /**

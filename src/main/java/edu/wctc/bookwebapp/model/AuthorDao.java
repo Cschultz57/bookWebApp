@@ -8,10 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-/**
- *
- * @author Carson
- */
 public class AuthorDao implements IAuthorDao {
 
     private String driverClass;

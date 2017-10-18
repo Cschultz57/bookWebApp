@@ -2,11 +2,6 @@ package edu.wctc.bookwebapp.model;
 
 import java.sql.SQLException;
 import java.util.List;
-
-/**
- *
- * @author chris.roller
- */
 public class AuthorService {
 
     private IAuthorDao authorDao;

@@ -129,8 +129,9 @@ public class AuthorController extends HttpServlet {
 
     private void GetAuthorListPage(HttpServletRequest request, HttpServletResponse response) {
         try {
-           
-            request.setAttribute("authors", as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS));
+            List<Author> authorList = null;
+           authorList = as.getListOfAuthors(userName, MAX_RECORDS);
+            request.setAttribute("authors", authorList);
 
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());

@@ -46,6 +46,6 @@
     </form>     
     <br>
     <br>
-    <a href="AuthorService?rType=home">Go to Home Page</a>
+    <a href="AuthorController?action=home">Go to Home Page</a>
 </body>
 </html>

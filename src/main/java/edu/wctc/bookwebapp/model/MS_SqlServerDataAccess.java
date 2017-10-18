@@ -14,10 +14,6 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.Vector;
 
-/**
- *
- * @author Carson
- */
 public class MS_SqlServerDataAccess implements DataAccess {
 
     private final int ALL_RECORDS = 0;

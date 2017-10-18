@@ -3,10 +3,6 @@ package edu.wctc.bookwebapp.model;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- *
- * @author jlombardo
- */
 public class Author {
     private Integer authorId;
     private String authorName;

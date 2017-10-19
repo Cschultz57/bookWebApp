@@ -68,13 +68,13 @@ public class AuthorController extends HttpServlet {
         try {
             String action = request.getParameter(ACTION);
             if (action.equalsIgnoreCase(LIST_ACTION)) {
-                GetAuthorListPage(request, response);
+                getAuthorList(request, response);
             } else if (action.equalsIgnoreCase(EDIT)) {
-                EditAuthor(request, response);
+                editAuthor(request, response);
             } else if (action.equalsIgnoreCase(DELETE)) {
-                DeleteAuthorById(request, response);
+                deleteAuthorById(request, response);
             } else if (action.equalsIgnoreCase(ADD)) {
-                AddNewAuthor(request, response);
+                addNewAuthor(request, response);
             }
         } catch (Exception e) {
             RESULTS_PAGE = ERROR_PAGE;
@@ -123,18 +123,16 @@ public class AuthorController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void GetAuthorListPage(HttpServletRequest request, HttpServletResponse response) {
+    private void getAuthorList(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Author> authorList = null;
-           authorList = as.getListOfAuthors(userName, MAX_RECORDS);
-            request.setAttribute("authors", authorList);
-
+           
+            request.setAttribute("authorList",  as.getListOfAuthors(userName, MAX_RECORDS));           
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
     }
 
-    private void EditAuthor(HttpServletRequest request, HttpServletResponse response) {
+    private void editAuthor(HttpServletRequest request, HttpServletResponse response) {
         try {
             String authorId = (request.getParameter("authorId"));
             Author authorToEdit = as.retrieveAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId );
@@ -149,23 +147,23 @@ public class AuthorController extends HttpServlet {
             colValues.add(authorToEdit.getAuthorName());
             colValues.add(dateAdded);
             as.updateAuthor(AUTHOR_TABLE, colNames, colValues, AUTHOR_ID_COL, authorId);
-            request.setAttribute("authors", RefreshAuthorList());
+            request.setAttribute("authorLost", refreshAuthorList());
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
     }
 
-    private void DeleteAuthorById(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteAuthorById(HttpServletRequest request, HttpServletResponse response) {
         try {
              String authorId = (request.getParameter("authorId"));
             as.deleteAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId);
-            request.setAttribute("authors", RefreshAuthorList());
+            request.setAttribute("authors", refreshAuthorList());
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
     }
 
-    private void AddNewAuthor(HttpServletRequest request, HttpServletResponse response) {
+    private void addNewAuthor(HttpServletRequest request, HttpServletResponse response) {
         try {
 
             Author newAuthor = new Author();
@@ -180,7 +178,7 @@ public class AuthorController extends HttpServlet {
         }
     }
 
-    private List<Author> RefreshAuthorList() throws SQLException, ClassNotFoundException {
+    private List<Author> refreshAuthorList() throws SQLException, ClassNotFoundException {
         return as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS);
     }
 

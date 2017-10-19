@@ -9,11 +9,11 @@
         <title>Author List</title>
     </head>
     <h1>Author List</h1>
-    <form id="authorAddEditForm" name="authorAddEditForm" method="POST" action="ac?rType=addEditAuthor">
+    <form id="authorAddEditForm" name="authorAddEditForm" method="POST" action="authorController?action=addEditAuthor">
         <input type="submit" value="Add/Edit">
     </form>
-    <form id="authorDeleteForm" name="authorDeleteForm" method="POST" action="ac?rType=deleteAuthor">
-        <input type="submit" value="Delete">
+    <form id="authorDeleteForm" name="authorDeleteForm" method="POST" action="authorController?action=deleteAuthor">
+        <input type="submit" value="Delete">        
         <table>
             
             
@@ -22,16 +22,9 @@
                 <th>Name</th>
                 <th>Date Added</th>
                
-            <c:forEach var="a" items="${authors}" varStatus="varStatus">                
-                <c:choose>
-                    <c:when test="${varStatus.count%2 == 0}">
-                        <tr style="background-color: #F0F8FF;">                              
-                        </c:when>
-                        <c:otherwise>
-                        <tr>
-                        </c:otherwise>     
-                    </c:choose>
-                            
+            <c:forEach var="a" items="${authorList}" varStatus="varStatus">                
+               
+                <tr>        
                     <td>
                         <input type="checkbox" name="authorId" value="${a.authorId}">
                     </td>

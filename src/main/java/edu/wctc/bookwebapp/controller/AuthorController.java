@@ -29,23 +29,28 @@ public class AuthorController extends HttpServlet {
     public static final String ERROR = "ERROR: Invalid Parameter";
     private static String RESULTS_PAGE = "/authorList.jsp";
     private static String ERROR_PAGE = "/error.jsp";
+    private static String HOME_PAGE = "/index.jsp";
+    private static String ADD_EDIT_PAGE = "/addEditPage.jsp";
     private static String LIST_ACTION = "authorList";
+    private static String HOME_ACTION = "home";
     private static String ACTION = "action";
     private static String EDIT = "edit";
     private static String DELETE = "delete";
     private static String ADD = "add";
+    private static String ADD_EDIT_ACTION = "addEdit";
     private final String AUTHOR_TABLE = "authors";
     private final String AUTHOR_NAME = "author_name";
     private final String AUTHOR_DATE = "author_date";
     private final String AUTHOR_ID_COL = "author_id";
-    
+    private final String CHECK_BOX = "authorIdChk";
+
     private int MAX_RECORDS = 50;
-    
+
     private DataAccess db;
     private AuthorService as;
 
     private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/bookWebApp";
+    private String url = "jdbc:mysql://localhost:3306/book";
     private String userName = "root";
     private String password = "admin";
 
@@ -61,14 +66,18 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        db = new MySqlDataAccess(driver, url, userName, password);
-        IAuthorDao dao = new AuthorDao(driver, url, userName, password, db);
-        as = new AuthorService(dao);
-
         try {
+            db = new MySqlDataAccess(driver, url, userName, password);
+            IAuthorDao dao = new AuthorDao(driver, url, userName, password, db);
+            as = new AuthorService(dao);
+
             String action = request.getParameter(ACTION);
             if (action.equalsIgnoreCase(LIST_ACTION)) {
                 getAuthorList(request, response);
+            } else if (action.equalsIgnoreCase(HOME_ACTION)) {
+                getHomePage(request, response);
+            } else if (action.equalsIgnoreCase(ADD_EDIT_ACTION)) {
+                getAddEditPage(request, response);
             } else if (action.equalsIgnoreCase(EDIT)) {
                 editAuthor(request, response);
             } else if (action.equalsIgnoreCase(DELETE)) {
@@ -125,8 +134,23 @@ public class AuthorController extends HttpServlet {
 
     private void getAuthorList(HttpServletRequest request, HttpServletResponse response) {
         try {
-           
-            request.setAttribute("authorList",  as.getListOfAuthors(userName, MAX_RECORDS));           
+            request.setAttribute("authorList", as.getListOfAuthors("author", MAX_RECORDS));
+        } catch (Exception e) {
+            request.setAttribute(ERROR, e.getCause());
+        }
+    }
+
+    private void getHomePage(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            RESULTS_PAGE = HOME_PAGE;
+        } catch (Exception e) {
+            request.setAttribute(ERROR, e.getCause());
+        }
+    }
+
+    private void getAddEditPage(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            RESULTS_PAGE = ADD_EDIT_PAGE;
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
@@ -134,8 +158,9 @@ public class AuthorController extends HttpServlet {
 
     private void editAuthor(HttpServletRequest request, HttpServletResponse response) {
         try {
+            RESULTS_PAGE = ADD_EDIT_PAGE;
             String authorId = (request.getParameter("authorId"));
-            Author authorToEdit = as.retrieveAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId );
+            Author authorToEdit = as.retrieveAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId);
             authorToEdit.setAuthorName(request.getParameter("authorName" + authorId));
             DateFormat format = new SimpleDateFormat("MM-dd-yy");
             Date dateAdded = format.parse(request.getParameter("addedDate" + authorId));
@@ -147,7 +172,7 @@ public class AuthorController extends HttpServlet {
             colValues.add(authorToEdit.getAuthorName());
             colValues.add(dateAdded);
             as.updateAuthor(AUTHOR_TABLE, colNames, colValues, AUTHOR_ID_COL, authorId);
-            request.setAttribute("authorLost", refreshAuthorList());
+            refreshAuthorList(request);
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
@@ -155,9 +180,13 @@ public class AuthorController extends HttpServlet {
 
     private void deleteAuthorById(HttpServletRequest request, HttpServletResponse response) {
         try {
-             String authorId = (request.getParameter("authorId"));
-            as.deleteAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, authorId);
-            request.setAttribute("authors", refreshAuthorList());
+            String[] authorIds = request.getParameterValues(CHECK_BOX);
+            if (authorIds != null) {
+                for (String id : authorIds) {
+                    as.deleteAuthorById(AUTHOR_TABLE, AUTHOR_ID_COL, id);
+                }
+            }
+            refreshAuthorList(request);
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
@@ -165,21 +194,22 @@ public class AuthorController extends HttpServlet {
 
     private void addNewAuthor(HttpServletRequest request, HttpServletResponse response) {
         try {
-
+            RESULTS_PAGE = ADD_EDIT_PAGE;
             Author newAuthor = new Author();
             newAuthor.setAuthorName(request.getParameter("addAuthorName"));
             DateFormat format = new SimpleDateFormat("MM-dd-YYYY");
             Date dateAdded = format.parse(request.getParameter("addAuthorDate"));
             newAuthor.setDateAdded(dateAdded);
-            
+
             as.addNewAuthor(newAuthor);
         } catch (Exception e) {
             request.setAttribute(ERROR, e.getCause());
         }
     }
 
-    private List<Author> refreshAuthorList() throws SQLException, ClassNotFoundException {
-        return as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS);
+    private void refreshAuthorList(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        List<Author> authors = as.getListOfAuthors(AUTHOR_TABLE, MAX_RECORDS);
+        request.setAttribute("authorList", authors);
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 public class AuthorDao implements IAuthorDao {
@@ -159,7 +158,7 @@ public class AuthorDao implements IAuthorDao {
             values.add(author.getAuthorName());
             db.insertRecord(AUTHOR_TABLE, columnNames, values);
         }
-
+    }
 //    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 //        AuthorDao dao = new AuthorDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin",
 //                new MySqlDataAccess("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin"));
@@ -170,4 +169,4 @@ public class AuthorDao implements IAuthorDao {
 //        }
 //    }
     }
-}
+

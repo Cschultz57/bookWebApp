@@ -101,9 +101,9 @@ public class AuthorService {
     }
 
 //    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//        AuthorService as = new AuthorService(new AuthorDao(new MySqlDbAccessor(), "com.mysql.jdbc.Driver",
-//                "jdbc:mysql://localhost:3306/book", "root", "admin"));
-//        List<Author> authors = as.getAllAuthors("author", 50);
+//       AuthorService as = new AuthorService(new AuthorDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin",
+//                new MySqlDataAccess("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin")));
+//        List<Author> authors = as.getListOfAuthors("author", 50);
 //        for (Author a : authors) {
 //            System.out.println(a);
 //        }
